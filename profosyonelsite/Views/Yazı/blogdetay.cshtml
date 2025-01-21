@@ -1,0 +1,210 @@
+﻿@using profosyonelsite.Models
+@model blog
+
+@{
+    ViewBag.Title = "Blog Detayı";
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Genel Sayfa ve Yazı Fontu */
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        /* Blog Detay Sayfası */
+        .blog-detail {
+            width: 80%;
+            margin: 0 auto;
+            padding: 40px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+        }
+
+            .blog-detail img {
+                width: 100%;
+                height: auto;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            }
+
+            .blog-detail h2 {
+                font-size: 24px;
+                font-weight: 700;
+                color: #333;
+            }
+
+            .blog-detail p {
+                font-size: 16px;
+                line-height: 1.8;
+                color: #666;
+                margin-top: 20px;
+            }
+
+        /* Geri Dön Butonu */
+        .back-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-top: 30px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+            .back-btn:hover {
+                background-color: #0056b3;
+            }
+
+        /* Yazılar Bölümü */
+        .yazilar {
+            margin-top: 50px;
+        }
+
+        .yazi {
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+            .yazi img {
+                width: 100%;
+                height: auto;
+                border-radius: 8px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            .yazi h3 {
+                font-size: 18px;
+                color: #333;
+                font-weight: 700;
+                margin-top: 10px;
+            }
+
+            .yazi p {
+                font-size: 14px;
+                line-height: 1.6;
+                color: #555;
+            }
+
+            .yazi .tarih {
+                font-size: 12px;
+                color: #999;
+                margin-top: 10px;
+            }
+
+        /* Yazı Ekleme Formu */
+        .form-container {
+            margin-top: 40px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            margin: 0 auto;
+        }
+
+        .textbox {
+            margin-bottom: 15px;
+        }
+
+            .textbox label {
+                display: block;
+                font-size: 16px;
+                color: #333;
+                margin-bottom: 5px;
+            }
+
+            .textbox input,
+            .textbox textarea {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                font-size: 14px;
+            }
+
+                .textbox input[type="file"] {
+                    padding: 0;
+                }
+
+        .file-upload label {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .btn-primary {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+            .btn-primary:hover {
+                background-color: #0056b3;
+            }
+    </style>
+</head>
+<body>
+    <div class="yazilar">
+        <h3>Yazılar</h3>
+        @foreach (var yazi in Model.yazı)
+        {
+            <div class="yazi">
+                @if (!string.IsNullOrEmpty(yazi.resim))
+                {
+                    <img src="@Url.Content(yazi.resim)" alt="Yazı Resmi" />
+                }
+                <h3>@yazi.header</h3>
+                <p>@yazi.title</p>
+            </div>
+            <a href="@Url.Action("yazısil", "Yazı", new {yazıid=yazi.yazıID})">Sil</a>
+        }
+    </div>
+
+    <!-- Yazı Ekleme Formu -->
+    <div class="form-container">
+        @using (Html.BeginForm("YazıEkle", "Yazı", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.HiddenFor(m => m.BlogID)
+            <div class="textbox">
+                <label for="Header">Başlık</label>
+                @Html.TextBox("header", null, new { placeholder = "Yazı Başlığı", @class = "form-control" })
+            </div>
+
+            <div class="textbox">
+                <label for="Title">İçerik</label>
+                @Html.TextArea("title", null, new { placeholder = "Yazı İçeriği", @class = "form-control" })
+            </div>
+
+            <div class="file-upload">
+                <label for="image-upload">Yazı Resmi Seçin</label>
+                <input type="file" name="resim" id="image-upload" accept="image/*" />
+            </div>
+            <button type="submit" class="btn-primary">Yazı Ekle</button>
+        }
+    </div>
+
+</body>
+</html>

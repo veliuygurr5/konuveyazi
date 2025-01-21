@@ -1,0 +1,143 @@
+﻿@using profosyonelsite.Models
+@model blog
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Blog Oluştur</title>
+    <link rel="stylesheet" href="blog-create.css">
+</head>
+<style>
+    /* Temel Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Form Container */
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    background-color: #f4f4f4;
+}
+
+/* Form Box */
+.form-box {
+    background-color: white;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
+}
+
+.form-box h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+}
+
+/* Textbox */
+.textbox {
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.textbox input,
+.textbox textarea {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.textbox input:focus,
+.textbox textarea:focus {
+    border-color: #4CAF50;
+}
+
+/* File Upload */
+.file-upload {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.file-upload label {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.file-upload input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+/* Button */
+.btn {
+    width: 100%;
+    padding: 15px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.btn:hover {
+    background-color: #45a049;
+}
+</style>
+<body>
+    <div class="form-container">
+        <div class="form-box">
+            <h2>Yeni Blog Oluştur</h2>
+            @using (Html.BeginForm("blogolustur", "Yazı", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <div class="textbox">
+                    <label for="Title">Blog Başlığı</label>
+                    @Html.TextBoxFor(m =>m.title, new { placeholder = "Blog Başlığı", @class = "form-control" })
+                </div>
+
+                <div class="file-upload">
+                    <label for="image-upload">Blog Resmi Seçin</label>
+                    @Html.HiddenFor(m => m.img)  <!-- Resim URL'si için gizli alan ekledik, eğer gerekirse kullanabilirsiniz. -->
+                    <input type="file" name="image" accept="image/*" required />
+                </div>
+
+                <button type="submit" class="btn btn-primary">Blog Oluştur</button>
+            }
+        </div>
+    </div>
+</body>
+</html>
+
